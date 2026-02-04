@@ -143,16 +143,23 @@ def finetune_distilbert_classifier(
             )
         )
 
-    trainer = Trainer(
-        model=model,
-        args=args,
-        train_dataset=tokenized["train"],
-        eval_dataset=tokenized["validation"],
-        data_collator=data_collator,
-        tokenizer=tokenizer,
-        compute_metrics=compute_metrics,
-        callbacks=callbacks,
-    )
+    # Transformers v5 removes `tokenizer=` from Trainer and replaces it with `processing_class=`.
+    trainer_kwargs = {
+        "model": model,
+        "args": args,
+        "train_dataset": tokenized["train"],
+        "eval_dataset": tokenized["validation"],
+        "data_collator": data_collator,
+        "compute_metrics": compute_metrics,
+        "callbacks": callbacks,
+    }
+    trainer_sig = inspect.signature(Trainer.__init__).parameters
+    if "tokenizer" in trainer_sig:
+        trainer_kwargs["tokenizer"] = tokenizer
+    elif "processing_class" in trainer_sig:
+        trainer_kwargs["processing_class"] = tokenizer
+
+    trainer = Trainer(**trainer_kwargs)
 
     trainer.train()
     metrics = trainer.evaluate(tokenized["test"])
