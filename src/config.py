@@ -9,8 +9,9 @@ from pathlib import Path
 @dataclass(frozen=True)
 class TrainConfig:
     # Dataset
-    dataset_name: str = "pubmed_rct"
-    dataset_config: str = "pubmed_20k_rct"
+    # NOTE: 'pubmed_rct' is not a valid HF dataset id; use a Hub dataset repo id instead.
+    dataset_name: str = "OxAISH-AL-LLM/pubmed_20k_rct"
+    dataset_config: str | None = None
     text_field: str | None = None  # auto-detect if None
     label_field: str = "label"
 
