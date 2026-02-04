@@ -4,7 +4,7 @@ Runnables and artifacts for fine-tuning and evaluating a Transformer on a domain
 
 ## What this project does
 
-We fine-tune a small Transformer encoder (DistilBERT) on a **biomedical domain** dataset (`pubmed_rct`) for **section classification**.
+We fine-tune a small Transformer encoder (DistilBERT) on a **biomedical domain** dataset (`OxAISH-AL-LLM/pubmed_20k_rct`) for **section classification**.
 
 - **Baseline**: TF‑IDF + Logistic Regression
 - **Fine-tuned model**: `distilbert-base-uncased` (Hugging Face `Trainer`)
