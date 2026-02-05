@@ -21,14 +21,16 @@ class TrainConfig:
     max_test_samples: int | None = None
 
     # Tokenization
-    model_name: str = "distilbert-base-uncased"
+    # Stronger biomedical model for this dataset; fits Colab T4 with smaller batch size.
+    model_name: str = "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext"
     max_length: int = 256
 
     # Training
-    output_dir: Path = Path("artifacts/distilbert_pubmed_rct")
-    num_train_epochs: float = 2.0
-    per_device_train_batch_size: int = 16
-    per_device_eval_batch_size: int = 32
+    output_dir: Path = Path("artifacts/pubmedbert_pubmed_rct")
+    num_train_epochs: float = 3.0
+    per_device_train_batch_size: int = 8
+    per_device_eval_batch_size: int = 16
+    gradient_accumulation_steps: int = 2
     learning_rate: float = 2e-5
     weight_decay: float = 0.01
     warmup_ratio: float = 0.06
