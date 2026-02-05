@@ -54,7 +54,6 @@ def train_tfidf_logreg_baseline(
         max_iter=2000,
         n_jobs=None,
         verbose=0,
-        multi_class="auto",
         random_state=seed,
     )
     clf.fit(x_train_vec, y_train)
