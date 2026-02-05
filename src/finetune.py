@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import json
 import inspect
+import math
 from pathlib import Path
 from typing import Dict, Optional, Tuple
 
@@ -50,6 +51,7 @@ def finetune_distilbert_classifier(
     save_strategy: str = "epoch",
     seed: int = 42,
     id2label: Optional[Dict[int, str]] = None,
+    gradient_accumulation_steps: int = 1,
     early_stopping_patience: int | None = 2,
     early_stopping_threshold: float = 0.0,
 ) -> Tuple[FinetuneResult, Dict[str, float]]:
@@ -107,6 +109,13 @@ def finetune_distilbert_classifier(
 
     use_fp16 = bool(torch.cuda.is_available())
 
+    # Replace deprecated warmup_ratio with warmup_steps (derived from total steps).
+    steps_per_epoch = math.ceil(
+        len(tokenized["train"]) / max(1, per_device_train_batch_size * max(1, gradient_accumulation_steps))
+    )
+    total_steps = int(math.ceil(steps_per_epoch * float(num_train_epochs)))
+    warmup_steps = int(total_steps * float(warmup_ratio))
+
     # Transformers occasionally renames TrainingArguments fields (e.g., evaluation_strategy -> eval_strategy).
     # Build kwargs in a forward-compatible way.
     sig_params = inspect.signature(TrainingArguments.__init__).parameters
@@ -117,7 +126,8 @@ def finetune_distilbert_classifier(
         "per_device_eval_batch_size": per_device_eval_batch_size,
         "learning_rate": learning_rate,
         "weight_decay": weight_decay,
-        "warmup_ratio": warmup_ratio,
+        "warmup_steps": warmup_steps,
+        "gradient_accumulation_steps": int(gradient_accumulation_steps),
         "save_strategy": save_strategy,
         "logging_steps": logging_steps,
         "load_best_model_at_end": True,
