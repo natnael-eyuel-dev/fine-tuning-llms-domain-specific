@@ -63,6 +63,7 @@ def main() -> None:
         save_strategy=cfg.save_strategy,
         seed=cfg.seed,
         id2label=id2label,
+        gradient_accumulation_steps=cfg.gradient_accumulation_steps,
         early_stopping_patience=cfg.early_stopping_patience,
         early_stopping_threshold=cfg.early_stopping_threshold,
     )
