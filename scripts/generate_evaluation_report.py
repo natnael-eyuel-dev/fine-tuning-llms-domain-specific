@@ -60,7 +60,7 @@ Generated: **{now}**
 | Model | Test Accuracy | Test Macro F1 |
 |------|---------------:|--------------:|
 | TF‑IDF + Logistic Regression | {f(baseline.get('test_accuracy'))} | {f(baseline.get('test_macro_f1'))} |
-| DistilBERT fine-tuned | {f(finetune.get('test_accuracy'))} | {f(finetune.get('test_macro_f1'))} |
+| PubMedBERT fine-tuned | {f(finetune.get('test_accuracy'))} | {f(finetune.get('test_macro_f1'))} |
 
 ## Notes
 
