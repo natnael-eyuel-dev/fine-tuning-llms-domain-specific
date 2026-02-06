@@ -73,6 +73,7 @@ Generated: **{now}**
 {ex_md}
 """
 
+    out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(out, encoding="utf-8")
     print("Wrote:", out_path)
 
